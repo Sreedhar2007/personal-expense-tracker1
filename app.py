@@ -95,7 +95,7 @@ def login():
 
     if request.method == 'POST':
         login_input = request.form.get('login_input', '').strip()
-        password = request.form.get('password', '').strip()
+        password = request.form.get('password', '')
 
         if not login_input or not password:
             flash('Please enter both username/email and password.', 'danger')
@@ -105,9 +105,9 @@ def login():
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
 
-            # Query user by username OR email
+            # Query user by username OR email (case-insensitive for both MySQL & SQLite)
             cursor.execute(
-                "SELECT * FROM users WHERE username = %s OR email = %s LIMIT 1",
+                "SELECT * FROM users WHERE LOWER(username) = LOWER(%s) OR LOWER(email) = LOWER(%s) LIMIT 1",
                 (login_input, login_input)
             )
             user = cursor.fetchone()
@@ -168,9 +168,9 @@ def register():
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
 
-            # Check if username or email is already taken
+            # Check if username or email is already taken (case-insensitive)
             cursor.execute(
-                "SELECT id, username, email FROM users WHERE username = %s OR email = %s LIMIT 1",
+                "SELECT id, username, email FROM users WHERE LOWER(username) = LOWER(%s) OR LOWER(email) = LOWER(%s) LIMIT 1",
                 (username, email)
             )
             existing_user = cursor.fetchone()

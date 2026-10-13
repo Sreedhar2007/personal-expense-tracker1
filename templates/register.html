@@ -25,6 +25,8 @@
                         placeholder="e.g. rahul_sharma" 
                         value="{{ username or '' }}" 
                         minlength="3" 
+                        autocapitalize="none"
+                        autocorrect="off"
                         required 
                         autofocus
                     >
@@ -44,6 +46,8 @@
                         class="form-control" 
                         placeholder="e.g. rahul@example.com" 
                         value="{{ email or '' }}" 
+                        autocapitalize="none"
+                        autocorrect="off"
                         required
                     >
                 </div>
